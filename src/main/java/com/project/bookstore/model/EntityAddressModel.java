@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ADDRESS", schema = "JRV77878", catalog = "")
-public class Entity_Address_model {
+public class EntityAddressModel {
 // Declaring ID for the address
 	private String address_ID;
 // Declaring Street #, Street Name, City, Zip Code, Phone Number 
