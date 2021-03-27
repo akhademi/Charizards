@@ -1,6 +1,6 @@
 package com.project.bookstore.model;
 
-public class BooksSold_model {
+public class BooksSoldModel {
 // Book ID
 	private int book_id;
 // Book title
@@ -10,10 +10,10 @@ public class BooksSold_model {
 // Book Quantities want to buy
 	private int book_quantity;
 
-	public BooksSold_model() {
+	public BooksSoldModel() {
 	}
 
-	public BooksSold_model(int bid, String title, double price, int quantity) {
+	public BooksSoldModel(int bid, String title, double price, int quantity) {
 		this.book_id = bid;
 		this.book_title = title;
 		this.book_price = price;
