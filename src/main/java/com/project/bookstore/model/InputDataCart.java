@@ -4,12 +4,12 @@ import java.util.List;
 
 public class InputDataCart {
 	private String userID;
-	private List<OrderDetailEntity> itemList;
+	private List<EntityOrderDetail> itemList;
 
 	public InputDataCart() {
 	}
 
-	public InputDataCart(String userId, List<OrderDetailEntity> itemList) {
+	public InputDataCart(String userId, List<EntityOrderDetail> itemList) {
 		this.userID = userId;
 		this.itemList = itemList;
 	}
@@ -18,7 +18,7 @@ public class InputDataCart {
 		return userID;
 	}
 
-	public List<OrderDetailEntity> getItemList() {
+	public List<EntityOrderDetail> getItemList() {
 		return itemList;
 	}
 
@@ -26,7 +26,7 @@ public class InputDataCart {
 		this.userID = userId;
 	}
 
-	public void setItemList(List<OrderDetailEntity> itemList) {
+	public void setItemList(List<EntityOrderDetail> itemList) {
 		this.itemList = itemList;
 	}
 

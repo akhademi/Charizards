@@ -1,51 +1,70 @@
 package com.project.bookstore.model;
 
-public class InputDataCartItem {
+import org.springframework.util.StringUtils;
 
-	private String userID;
-	private int bookID;
-	private int quantity;
-	private double price;
+public class InputDataCreditCard extends InputData {
+	private String name;			// name on credit card
+	private String cardNumber; 		// 16 digit credit card number
+	private String expiryDate; 		// expiry date of credit card in the format: 'mm/yy'
+	private String cvv; 			// 3 digit security code on the back of credit card
 
-	public InputDataCartItem() {
+	public InputDataCreditCard() {
 	}
 
-	public InputDataCartItem(String userId, int bid, int quantity, double price) {
-		this.userID = userId;
-		this.bookID = bid;
-		this.quantity = quantity;
-		this.price = price;
+	public boolean isNameValid() {
+		return (!name.equals("") && !StringUtils.isEmpty(name) && name.length() > 0 && name.length() < 30);
+	}
+	
+	public String getName() {
+		return name;
 	}
 
-	public String getUserId() {
-		return userID;
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	// checks if the card number is 16 digits (all numbers)
+	public boolean isNumberValid() {
+		return this.cardNumber.matches("(?:[1-9][0-9]{15})|");
+	}
+	
+	public String getNumber() {
+		return cardNumber;
 	}
 
-	public int getBid() {
-		return bookID;
+	public void setNumber(String number) {
+		this.cardNumber = number;
+	}
+	
+	// checks if the expiry date is in the correct format (mm/yy)
+	public boolean isExpiryValid() {
+		return this.expiryDate.matches("(?:0[1-9]|1[0-2])/[0-9]{2}");
+	}
+	
+	public String getExpiry() {
+		return expiryDate;
 	}
 
-	public int getQuantity() {
-		return quantity;
+	public void setExpiry(String expiry) {
+		this.expiryDate = expiry;
+	}
+	
+	// checks if the CVV is 3 digits (all numbers)
+	public boolean isCvvValid() {
+		return this.cvv.matches("^[0-9]{3}$");
 	}
 
-	public double getPrice() {
-		return price;
+	public String getCvv() {
+		return cvv;
 	}
 
-	public void setUserId(String userId) {
-		this.userID = userId;
+	public void setCvv(String cvv) {
+		this.cvv = cvv;
+	}
+	
+	// checks if the name, card number, expiry date, and CVV entered is correct
+	public boolean isValid() {
+		return isNameValid() && isNumberValid() && isExpiryValid() && isCvvValid();
 	}
 
-	public void setBid(int bid) {
-		this.bookID = bid;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
 }

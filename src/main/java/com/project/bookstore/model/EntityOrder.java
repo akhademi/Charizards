@@ -14,7 +14,7 @@ public class EntityOrder {
 	private Integer submitAttempts;
 
 	@OneToMany(mappedBy = "order")
-	private List<OrderDetailEntity> orderDetails;
+	private List<EntityOrderDetail> orderDetails;
 
 	@Id
 	@Column(name = "ORDER_ID")

@@ -1,8 +1,8 @@
 package com.project.bookstore.repository;
 
 import com.project.bookstore.common.Util;
-import com.project.bookstore.controller.UserController;
-import com.project.bookstore.model.BooksSoldData;
+import com.project.bookstore.controller.UserCtrl;
+import com.project.bookstore.model.BooksSoldModel;
 import com.project.bookstore.model.CartItem;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -20,7 +20,7 @@ import java.util.List;
 @Repository
 public class AdminRepository {
 
-  Logger log = LoggerFactory.getLogger(UserController.class);
+  Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
   @Autowired
   private EntityManager entityManager;
@@ -29,7 +29,7 @@ public class AdminRepository {
   }
 
   @Transactional
-  public List<BooksSoldData> returnBooksSold(){
+  public List<BooksSoldModel> returnBooksSold(){
     try{
       Session session = getSession();
       Query<?> query = session.createNativeQuery("with summed as " +
@@ -42,9 +42,9 @@ public class AdminRepository {
               "join BOOK B on S.bid = B.bid ");
       List<Object[]> itemList = (List<Object[]>)query.getResultList();
 
-      List<BooksSoldData> books = new ArrayList<>();
+      List<BooksSoldModel> books = new ArrayList<>();
       for(Object[] bookData: itemList){
-        BooksSoldData item = new BooksSoldData();
+    	BooksSoldModel item = new BooksSoldModel();
         item.setBid((int)bookData[0]);
         item.setTitle(String.valueOf(bookData[1]));
         item.setPrice(Util.roundDouble((Double) bookData[2]));
@@ -60,7 +60,7 @@ public class AdminRepository {
   }
 
   @Transactional
-  public List<BooksSoldData> topSoldBooks(){
+  public List<BooksSoldModel> topSoldBooks(){
     try{
       Session session = getSession();
       Query<?> query = session.createNativeQuery("with summed as " +
@@ -74,9 +74,9 @@ public class AdminRepository {
               "order by S.quantity desc limit 10");
       List<Object[]> itemList = (List<Object[]>)query.getResultList();
 
-      List<BooksSoldData> books = new ArrayList<>();
+      List<BooksSoldModel> books = new ArrayList<>();
       for(Object[] bookData: itemList){
-        BooksSoldData item = new BooksSoldData();
+    	BooksSoldModel item = new BooksSoldModel();
         item.setBid((int)bookData[0]);
         item.setTitle(String.valueOf(bookData[1]));
         BigInteger bg = new BigInteger(String.valueOf(bookData[2]));

@@ -1,7 +1,7 @@
 package com.project.bookstore.service;
 
 import com.project.bookstore.common.WConstants;
-import com.project.bookstore.model.BooksSoldData;
+import com.project.bookstore.model.BooksSoldModel;
 import com.project.bookstore.repository.AdminRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,10 @@ public class AdminService {
       return json.toString(4);
     }
 
-    List<BooksSoldData> list = adminRepository.returnBooksSold();
+    List<BooksSoldModel> list = adminRepository.returnBooksSold();
 
     StringBuilder table = new StringBuilder("<table><tr><th>BID</th><th>TITLE</th><th>PRICE</th><th>QUANTITY SOLD</th></tr>");
-    for(BooksSoldData book: list){
+    for(BooksSoldModel book: list){
       table.append("<tr><td>").append(book.getBid()).append("</td><td>").append(book.getTitle()).append("</td><td>")
               .append(book.getPrice()).append("</td><td>").append(book.getQuantity()).append("</td></tr>");
     }
@@ -48,10 +48,10 @@ public class AdminService {
       return json.toString(4);
     }
 
-    List<BooksSoldData> list = adminRepository.topSoldBooks();
+    List<BooksSoldModel> list = adminRepository.topSoldBooks();
 
     StringBuilder table = new StringBuilder("<table><tr><th>BID</th><th>TITLE</th><th>QUANTITY SOLD</th></tr>");
-    for(BooksSoldData book: list){
+    for(BooksSoldModel book: list){
       table.append("<tr><td>").append(book.getBid()).append("</td><td>").append(book.getTitle()).append("</td><td>")
               .append(book.getQuantity()).append("</td></tr>");
     }
