@@ -2,7 +2,7 @@ package com.project.bookstore.service;
 
 import com.project.bookstore.common.WConstants;
 import com.project.bookstore.model.BooksSoldModel;
-import com.project.bookstore.repository.AdminRepository;
+import com.project.bookstore.repository.AdminRepo;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class AdminService {
   @Autowired
   UserService userService;
   @Autowired
-  AdminRepository adminRepository;
+  AdminRepo adminRepository;
 
   public String generateReport(String adminUserId){
     JSONObject json = new JSONObject();

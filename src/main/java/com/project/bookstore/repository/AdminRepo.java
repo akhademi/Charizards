@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class AdminRepository {
+public class AdminRepo {
 
   Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
