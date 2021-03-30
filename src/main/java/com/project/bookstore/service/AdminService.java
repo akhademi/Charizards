@@ -1,6 +1,6 @@
 package com.project.bookstore.service;
 
-import com.project.bookstore.common.WConstants;
+import com.project.bookstore.miscellaneous.FrontEndComs;
 import com.project.bookstore.model.BooksSoldModel;
 import com.project.bookstore.repository.AdminRepo;
 import org.json.JSONObject;
@@ -22,7 +22,7 @@ public class AdminService {
     JSONObject json = new JSONObject();
     // make sure the userId belongs to admin
     if (!userService.isUserAdmin(adminUserId)){
-      json.put("status", WConstants.RESPONSE_FAIL);
+      json.put("status", FrontEndComs.RESPONSE_FAIL);
       json.put("message", "Unauthorized access denied.");
       return json.toString(4);
     }
@@ -43,7 +43,7 @@ public class AdminService {
     JSONObject json = new JSONObject();
     // make sure the userId belongs to admin
     if (!userService.isUserAdmin(adminUserId)){
-      json.put("status", WConstants.RESPONSE_FAIL);
+      json.put("status", FrontEndComs.RESPONSE_FAIL);
       json.put("message", "Unauthorized access denied.");
       return json.toString(4);
     }

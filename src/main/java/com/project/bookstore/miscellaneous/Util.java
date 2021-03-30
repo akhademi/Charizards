@@ -1,4 +1,4 @@
-package com.project.bookstore.common;
+package com.project.bookstore.miscellaneous;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -12,8 +12,8 @@ import java.security.MessageDigest;
 
 public class Util {
 
-	// call UserController class here to create a user log
-	// waiting until other members finish that class
+	// call UserCtrl class here to create a user log
+	// waiting until UserCtrl class is completed
 	static Logger log;
 
 
@@ -21,25 +21,29 @@ public class Util {
 		JSONObject json = new JSONObject();
 
 		switch (statusCode) {
-		case WConstants.RESULT_INVALID_DATA:
-			json.put("status", WConstants.RESPONSE_FAIL);
-			json.put("message", "Invalid data provided. Please try again.");
+		case ErrorCodes.INVALID_USER_SIGNUP_DATA:
+			json.put("status", FrontEndComs.RESPONSE_FAIL);
+			json.put("message", "User info is invalid. Please try again.");
 			break;
-		case WConstants.INVALID_USER_SIGNUP_DATA:
-			json.put("status", WConstants.RESPONSE_FAIL);
-			json.put("message", "Data was invalid, please try again.");
+		case ErrorCodes.RESULT_USER_ALREADY_EXISTS:
+			json.put("status", FrontEndComs.RESPONSE_FAIL);
+			json.put("message", "User with this email already exists. Please enter a different email or try logging in.");
 			break;
-		case WConstants.RESULT_UNKNOWN_ERROR:
-			json.put("status", WConstants.RESPONSE_FAIL);
+		case ErrorCodes.RESULT_INVALID_CREDENTIALS:
+			json.put("status", FrontEndComs.RESPONSE_FAIL);
+			json.put("message", "Invalid email or password. Please try again.");
+			break;
+		case ErrorCodes.RESULT_USER_DOES_NOT_EXIST:
+			json.put("status", FrontEndComs.RESPONSE_FAIL);
+			json.put("message", "User does not exist. Please enter a valid email or signup.");
+			break;
+		case ErrorCodes.RESULT_INVALID_DATA:
+			json.put("status", FrontEndComs.RESPONSE_FAIL);
+			json.put("message", "Invalid data. Please try again.");
+			break;
+		case FrontEndComs.RESULT_UNKNOWN_ERROR:
+			json.put("status", FrontEndComs.RESPONSE_FAIL);
 			json.put("message", "Unknown error. Please try again.");
-			break;
-		case WConstants.RESULT_INVALID_CREDENTIALS:
-			json.put("status", WConstants.RESPONSE_FAIL);
-			json.put("message", "Invalid email or password");
-			break;
-		case WConstants.RESULT_USER_DOES_NOT_EXIST:
-			json.put("status", WConstants.RESPONSE_FAIL);
-			json.put("message", "User does not exist. Try signing up instead.");
 			break;
 		}
 
@@ -66,6 +70,7 @@ public class Util {
 		} catch (Exception e) {
 			log.error("Error hashing password.");
 		}
+		
 		return sha1;
 	}
 
