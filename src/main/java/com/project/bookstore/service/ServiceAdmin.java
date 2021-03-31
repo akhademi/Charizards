@@ -7,14 +7,13 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
-public class AdminService {
+public class ServiceAdmin {
 
   @Autowired
-  UserService userService;
+  ServiceUser userService;
   @Autowired
   AdminRepository adminRepository;
 
