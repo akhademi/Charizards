@@ -1,5 +1,6 @@
 package com.project.bookstore.miscellaneous;
 
+import com.project.bookstore.controller.UserCtrl;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +13,10 @@ import java.security.MessageDigest;
 
 public class Util {
 
-	// call UserCtrl class here to create a user log
-	// waiting until UserCtrl class is completed
-	static Logger log;
+	static Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
 
-	public static String getJsonResponse(int statusCode, @Nullable String user_id) {
+	public static String getJsonResponse(int statusCode, @Nullable String userID) {
 		JSONObject json = new JSONObject();
 
 		switch (statusCode) {
@@ -47,8 +46,8 @@ public class Util {
 			break;
 		}
 
-		if(user_id != null) {
-			json.put("user", user_id);
+		if(userID != null) {
+			json.put("user", userID);
 		}
 
 		return json.toString(4);
