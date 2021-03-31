@@ -44,9 +44,9 @@ public class ReviewRepo {
 		
 		try {
 			Query<?> query = session.createNativeQuery("INSERT into review (BID, USER_ID, STARS, MESSAGE, USER_NAME) values " +
-					"(:bid, :userId, :stars, :message, (SELECT u.FIRST_NAME FROM user u WHERE u.USER_ID = :userID limit 1))");
+					"(:bid, :userID, :stars, :message, (SELECT u.FIRST_NAME FROM user u WHERE u.USER_ID = :userID limit 1))");
 			query.setParameter("bid", bid);
-			query.setParameter("userId", userID);
+			query.setParameter("userID", userID);
 			query.setParameter("stars", starRating);
 			query.setParameter("message", message);
 			

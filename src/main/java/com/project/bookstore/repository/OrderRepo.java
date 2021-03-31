@@ -35,8 +35,8 @@ public class OrderRepo {
 	public EntityOrder findCartByID(String userID) {
 		try {
 			Session session = getSession();
-			Query<?> query = session.createNativeQuery("SELECT * FROM ORDER WHERE USER_ID = :userId AND (STATUS = :status) limit 1").addEntity(EntityOrder.class);
-			query.setParameter("userId", userID);
+			Query<?> query = session.createNativeQuery("SELECT * FROM ORDER WHERE USER_ID = :userID AND (STATUS = :status) limit 1").addEntity(EntityOrder.class);
+			query.setParameter("userID", userID);
 			query.setParameter("status", OrderState.OrderStatus.IN_CART.getValue());
 
 			return (EntityOrder)query.getSingleResult();
@@ -52,8 +52,8 @@ public class OrderRepo {
 	public EntityOrder insertNewCart(String userID) {
 		try {
 			Session session = getSession();
-			Query<?> query = session.createNativeQuery("INSERT INTO ORDER (user_id, status) values(:userId, :status)");
-			query.setParameter("userId", userID);
+			Query<?> query = session.createNativeQuery("INSERT INTO ORDER (user_id, status) values(:userID, :status)");
+			query.setParameter("userID", userID);
 			query.setParameter("status", OrderState.OrderStatus.IN_CART.getValue());
 
 			int res = query.executeUpdate();	// update the query to insert the new cart and its parameters
@@ -79,8 +79,8 @@ public class OrderRepo {
 			Session session = getSession();
 			Query<?> query = session.createNativeQuery("SELECT od.bid, B.title, B.images, od.quantity, od.price, (od.quantity * od.price) as amount from " +
 					"ORDER_DETAIL od join BOOK B on od.BID = B.BID " +
-					"WHERE od.ORDER_ID = :orderId");
-			query.setParameter("orderId", orderID);
+					"WHERE od.ORDER_ID = :orderID");
+			query.setParameter("orderID", orderID);
 
 			List<Object[]> itemList = (List<Object[]>)query.getResultList();
 			List<CartItem> cartItems = new ArrayList<>();
@@ -155,13 +155,13 @@ public class OrderRepo {
 				// NOTE: if item already exists in cart, increase the quantity instead
 				// Otherwise add item as usual
 				Query<?> query = session.createNativeQuery("merge into ORDER_DETAIL as od using" + 
-						" (values(:orderId, :bid, :quan, :price)) as data(A, B, C, D) " +
+						" (values(:orderID, :bid, :quantity, :price)) as data(A, B, C, D) " +
 						"on od.ORDER_ID = data.A and od.BID = data.B " +
 						"when matched then update set od.QUANTITY = od.QUANTITY + data.C " +
 						"when not matched then INSERT values (data.A, data.B, data.C, data.D)");
-				query.setParameter("orderId", orderID);
+				query.setParameter("orderID", orderID);
 				query.setParameter("bid", orderDetail.getBid());
-				query.setParameter("quan", orderDetail.getQuantity());
+				query.setParameter("quantity", orderDetail.getQuantity());
 				query.setParameter("price", orderDetail.getPrice());
 
 				result = query.executeUpdate();
@@ -184,8 +184,8 @@ public class OrderRepo {
 			Session session = getSession();
 			
 			// NOTE: If item already exists in cart, decrease the quantity
-			Query<?> query = session.createNativeQuery("DELETE FROM ORDER_DETAIL WHERE ORDER_ID = :orderId and BID = :bid");
-			query.setParameter("orderId", orderID);
+			Query<?> query = session.createNativeQuery("DELETE FROM ORDER_DETAIL WHERE ORDER_ID = :orderID and BID = :bid");
+			query.setParameter("orderID", orderID);
 			query.setParameter("bid", bid);
 			
 			result = query.executeUpdate();
@@ -206,9 +206,9 @@ public class OrderRepo {
 			Session session = getSession();
 			
 			// increase the number of submit attempts (max is 3 as defined in the Constraints class)
-			Query<?> query = session.createNativeQuery("UPDATE ORDER set SUBMIT_ATTEMPTS = SUBMIT_ATTEMPTS + 1 WHERE USER_ID = :userId and ORDER_ID = :orderId");
-			query.setParameter("orderId", orderID);
-			query.setParameter("userId", userID);
+			Query<?> query = session.createNativeQuery("UPDATE ORDER set SUBMIT_ATTEMPTS = SUBMIT_ATTEMPTS + 1 WHERE USER_ID = :userID and ORDER_ID = :orderID");
+			query.setParameter("orderID", orderID);
+			query.setParameter("userID", userID);
 			
 			result = query.executeUpdate();
 			return result;
@@ -228,10 +228,10 @@ public class OrderRepo {
 			Session session = getSession();
 			
 			// update the status of the order to ORDERED once it has been submitted
-			Query<?> query = session.createNativeQuery("UPDATE ORDER set STATUS = :status WHERE USER_ID = :userId and ORDER_ID = :orderId");
+			Query<?> query = session.createNativeQuery("UPDATE ORDER set STATUS = :status WHERE USER_ID = :userID and ORDER_ID = :orderID");
 			query.setParameter("status", OrderState.OrderStatus.ORDERED.getValue());
-			query.setParameter("orderId", orderID);
-			query.setParameter("userId", userID);
+			query.setParameter("orderID", orderID);
+			query.setParameter("userID", userID);
 			
 			result = query.executeUpdate();
 			return result;

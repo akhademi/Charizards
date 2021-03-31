@@ -69,7 +69,7 @@ public class EntityAddressModel {
 		this.address_ID = addressId;
 	}
 
-	public void setStreetNo(Integer streetNo) {
+	public void setStreetNumber(Integer streetNo) {
 		this.streetNumber = streetNo;
 	}
 
@@ -89,11 +89,11 @@ public class EntityAddressModel {
 		this.country = country;
 	}
 
-	public void setZip(String zip) {
+	public void setZipCode(String zip) {
 		this.zipCode = zip;
 	}
 
-	public void setPhone(String phone) {
+	public void setPhoneNumber(String phone) {
 		this.phoneNumber = phone;
 	}
 

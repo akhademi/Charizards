@@ -31,7 +31,7 @@ public class EntityUser {
 
 	@Basic
 	@Column
-	private String address_ID;
+	private String addressID;
 
 	public EntityUser(String user_id, String first_name, String last_name, String email, String password,
 			Integer user_type, String address_id) {
@@ -41,21 +41,21 @@ public class EntityUser {
 		this.email = email;
 		this.password = password;
 		this.userType = user_type;
-		this.address_ID = address_id;
+		this.addressID = address_id;
 	}
 
 	public EntityUser() {
 	}
 
-	public String getUser_id() {
+	public String getUserID() {
 		return userID;
 	}
 
-	public String getFirst_name() {
+	public String getFirstName() {
 		return firstName;
 	}
 
-	public String getLast_name() {
+	public String getLastName() {
 		return lastName;
 	}
 
@@ -63,23 +63,23 @@ public class EntityUser {
 		return email;
 	}
 
-	public Integer getUser_type() {
+	public Integer getUserType() {
 		return userType;
 	}
 
-	public String getAddress_id() {
-		return address_ID;
+	public String getAddressID() {
+		return addressID;
 	}
 
-	public void setUser_id(String user_id) {
+	public void setUserID(String user_id) {
 		this.userID = user_id;
 	}
 
-	public void setFirst_name(String first_name) {
+	public void setFirstName(String first_name) {
 		this.firstName = first_name;
 	}
 
-	public void setLast_name(String last_name) {
+	public void setLastName(String last_name) {
 		this.lastName = last_name;
 	}
 
@@ -95,12 +95,12 @@ public class EntityUser {
 		this.password = password;
 	}
 
-	public void setUser_type(Integer user_type) {
+	public void setUserType(Integer user_type) {
 		this.userType = user_type;
 	}
 
-	public void setAddress_id(String address_id) {
-		this.address_ID = address_id;
+	public void setAddressID(String address_id) {
+		this.addressID = address_id;
 	}
 
 	@Override

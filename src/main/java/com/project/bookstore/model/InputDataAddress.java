@@ -12,7 +12,7 @@ public class InputDataAddress extends InputData {
 	public InputDataAddress() {
 	}
 
-	public int getStreetNo() {
+	public int getStreeNumber() {
 		return streetNumber;
 	}
 
@@ -24,11 +24,11 @@ public class InputDataAddress extends InputData {
 		return city;
 	}
 
-	public String getZip() {
+	public String getZipCode() {
 		return zipCode;
 	}
 
-	public String getPhone() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
@@ -40,7 +40,7 @@ public class InputDataAddress extends InputData {
 		return country;
 	}
 
-	public void setStreetNo(int streetNo) {
+	public void setStreetNumber(int streetNo) {
 		this.streetNumber = streetNo;
 	}
 
@@ -60,11 +60,11 @@ public class InputDataAddress extends InputData {
 		this.country = country;
 	}
 
-	public void setZip(String zip) {
+	public void setZipCode(String zip) {
 		this.zipCode = zip;
 	}
 
-	public void setPhone(String phone) {
+	public void setPhoneNumber(String phone) {
 		this.phoneNumber = phone;
 	}
 }

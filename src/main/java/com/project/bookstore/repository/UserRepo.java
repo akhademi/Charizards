@@ -33,12 +33,12 @@ public class UserRepo {
 		Session session = getSession();
 
 		try {
-			Query<?> query = session.createNativeQuery("INSERT into user(USER_ID, FIRST_NAME, LAST_NAME, USER_TYPE, EMAIL, PASSWORD" +
-					") VALUES (:user_id, :f_name, :l_name, :user_type, :email, :password)");
-			query.setParameter("user_id", UUID.randomUUID().toString());
-			query.setParameter("f_name", user.getFirst_name());
-			query.setParameter("l_name", user.getLast_name());
-			query.setParameter("user_type", Users.UserType.CUSTOMER.getValue());
+			Query<?> query = session.createNativeQuery("INSERT into user(USERID, FIRSTNAME, LASTNAME, USERTYPE, EMAIL, PASSWORD" +
+					") VALUES (:userID, :firstName, :lastName, :userType, :email, :password)");
+			query.setParameter("userID", UUID.randomUUID().toString());
+			query.setParameter("firstName", user.getFirstName());
+			query.setParameter("lastName", user.getLastName());
+			query.setParameter("userType", Users.UserType.CUSTOMER.getValue());
 			query.setParameter("email", user.getEmail());
 			query.setParameter("password", (user.getPassword()));
 
@@ -50,109 +50,115 @@ public class UserRepo {
 		}
 	}
 
+	// get user linked to specified email
 	@Transactional
 	public EntityUser getUser(String email) {
-	    Session session = getSession();
-	    
-	    try {
-	      Query<?> query = session.createNativeQuery("SELECT * FROM user WHERE EMAIL = :email and (USER_TYPE = :user_type1 or USER_TYPE = :user_type2)").addEntity(EntityUser.class);
-	      query.setParameter("email", email);
-	      query.setParameter("user_type1", Users.UserType.CUSTOMER.getValue());
-	      query.setParameter("user_type2", Users.UserType.ADMIN.getValue());
-	      
-	      return (EntityUser)query.getSingleResult();
-	      
-	    } catch (Exception e) {
-	      log.error(e.getMessage(), e);
-	      return null;
-	    }
+		Session session = getSession();
+
+		try {
+			Query<?> query = session.createNativeQuery("SELECT * FROM user WHERE EMAIL = :email and (USERTYPE = :user_type1 or USER_TYPE = :user_type2)").addEntity(EntityUser.class);
+			query.setParameter("email", email);
+			query.setParameter("user_type1", Users.UserType.CUSTOMER.getValue());
+			query.setParameter("user_type2", Users.UserType.ADMIN.getValue());
+
+			return (EntityUser)query.getSingleResult();
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
 	}
 
+	// get admin based on specified user ID
 	@Transactional
 	public EntityUser getAdminByUserID(String userID) {
-	    Session session = getSession();
-	    
-	    try {
-	      Query<?> query = session.createNativeQuery("SELECT * FROM user WHERE USER_ID = :userId and USER_TYPE = :user_type").addEntity(EntityUser.class);
-	      query.setParameter("userId", userID);
-	      query.setParameter("user_type", Users.UserType.ADMIN.getValue());
-	      
-	      return (EntityUser)query.getSingleResult();
-	      
-	    } catch (Exception e) {
-	      log.error(e.getMessage(), e);
-	      return null;
-	    }
+		Session session = getSession();
+
+		try {
+			Query<?> query = session.createNativeQuery("SELECT * FROM user WHERE USERID = :userID and USERTYPE = :userType").addEntity(EntityUser.class);
+			query.setParameter("userID", userID);
+			query.setParameter("userType", Users.UserType.ADMIN.getValue());
+
+			return (EntityUser) query.getSingleResult();
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
 	}
 
+	// add a new address
 	@Transactional
 	public int addAddress(InputDataAddress addressInfo) {
 		try {
 			Session session = getSession();
-			
+
 			UUID uuid = UUID.randomUUID();
-			Query<?> query = session.createNativeQuery("INSERT into ADDRESS (STREET_NO, STREET_NAME, CITY, PROVINCE, COUNTRY, ZIP, PHONE, ADDRESS_ID) " +
-					"values (:streetNo, :streetName, :city, :province, :country, :zip, :phone, :uuid)");
-			query.setParameter("streetNo", addressInfo.getStreetNo());
+			Query<?> query = session.createNativeQuery("INSERT INTO ADDRESS (STREET_NUMBER, STREET_NAME, CITY, PROVINCE, COUNTRY, ZIP_CODE, PHONE_NUMBER, ADDRESS_ID) " +
+					"values (:streetNumber, :streetName, :city, :province, :country, :zip, :phone, :uuid)");
+			query.setParameter("streetNumber", addressInfo.getStreeNumber());
 			query.setParameter("streetName", addressInfo.getStreetName());
 			query.setParameter("city", addressInfo.getCity());
 			query.setParameter("province", addressInfo.getProvince());
 			query.setParameter("country", addressInfo.getCountry());
-			query.setParameter("zip", addressInfo.getZip());
-			query.setParameter("phone", addressInfo.getPhone());
+			query.setParameter("zip", addressInfo.getZipCode());
+			query.setParameter("phone", addressInfo.getPhoneNumber());
 			query.setParameter("uuid", uuid.toString());
-			
+
 			int result = query.executeUpdate();
 
-			// update user table with the addressId
+			// update user table with the address ID
 			if (result == 1) {
-				query = session.createNativeQuery("update USER set ADDRESS_ID = :uuid where USER_ID = :userId");
+				query = session.createNativeQuery("UPDATE USER SET ADDRESSID = :uuid WHERE USERID = :userID");
 				query.setParameter("uuid", uuid.toString());
-				query.setParameter("userId", addressInfo.getUserId());
-				
+				query.setParameter("userID", addressInfo.getUserId());
+
 				return query.executeUpdate();
 			}
-			
+
 			return FrontEndComs.RESULT_UNKNOWN_ERROR;
-			
+
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return FrontEndComs.RESULT_UNKNOWN_ERROR;
 		}
 	}
 
+	// get address linked to specified user ID
 	@Transactional
 	public EntityAddressModel getAddress(String userID) {
-	    Session session = getSession();
-	    
-	    try {
-	      Query<?> query = session.createNativeQuery("select A.* from ADDRESS A join USER U on A.ADDRESS_ID = U.ADDRESS_ID where " +
-	              "U.USER_ID = :userId and U.USER_TYPE = :userType").addEntity(EntityAddressModel.class);
-	      query.setParameter("userId", userID);
-	      query.setParameter("userType", Users.UserType.CUSTOMER.getValue());
-	      
-	      return (EntityAddressModel)query.getSingleResult();
-	      
-	    } catch (Exception e) {
-	      log.error(e.getMessage(), e);
-	      return null;
-	    }
+		Session session = getSession();
+
+		try {
+			Query<?> query = session.createNativeQuery("SELECT A.* FROM ADDRESS A join USER U on A.ADDRESS_ID = U.ADDRESS_ID WHERE " +
+					"U.USERID = :userID and U.USERTYPE = :userType").addEntity(EntityAddressModel.class);
+			query.setParameter("userID", userID);
+			query.setParameter("userType", Users.UserType.CUSTOMER.getValue());
+
+			return (EntityAddressModel)query.getSingleResult();
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
 	}
 
+	// method to check if an email exists within the database
+	// this means that the email is already being used for an account
 	@Transactional
 	public boolean emailExist(String email) {
-	    Session session = getSession();
-	    
-	    try {
-	      Query<?> query = session.createNativeQuery("select * from user where email = :email");
-	      query.setParameter("email", email);
-	      
-	      return query.getSingleResult() != null;
-	      
-	    } catch (Exception e) {
-	      log.error(e.getMessage(), e);
-	      return false;
-	    }
+		Session session = getSession();
+
+		try {
+			Query<?> query = session.createNativeQuery("SELECT * FROM user WHERE email = :email");
+			query.setParameter("email", email);
+
+			return query.getSingleResult() != null;
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return false;
+		}
 	}
 
 }
