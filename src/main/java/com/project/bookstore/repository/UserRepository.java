@@ -1,7 +1,8 @@
 package com.project.bookstore.repository;
 
-import com.project.bookstore.common.WConstants;
-import com.project.bookstore.controller.UserController;
+import com.project.bookstore.miscellaneous.ErrorCodes;
+import com.project.bookstore.miscellaneous.Users.UserType;
+import com.project.bookstore.controller.UserCtrl;
 import com.project.bookstore.model.EntityAddressModel;
 import com.project.bookstore.model.InputDataAddress;
 import com.project.bookstore.model.EntityUser;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Repository
 public class UserRepository {
 
-  Logger log = LoggerFactory.getLogger(UserController.class);
+  Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
   @Autowired
   private EntityManager entityManager;
@@ -37,13 +38,13 @@ public class UserRepository {
       query.setParameter("user_id", UUID.randomUUID().toString());
       query.setParameter("f_name", EntityUser.getFirst_name());
       query.setParameter("l_name", EntityUser.getLast_name());
-      query.setParameter("user_type", WConstants.UserType.USER.getValue()); // todo: replace this with the correct user_type based on visitor, user, partner...
+      query.setParameter("user_type", UserType.CUSTOMER.getValue()); // todo: replace this with the correct user_type based on visitor, user, partner...
       query.setParameter("email", EntityUser.getEmail());
       query.setParameter("password", (EntityUser.getPassword()));
       return query.executeUpdate();
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     }
   }
 
@@ -66,8 +67,8 @@ public class UserRepository {
     try{
       Query<?> query = session.createNativeQuery("select * from user where EMAIL = :email and (USER_TYPE = :user_type1 or USER_TYPE = :user_type2)").addEntity(EntityUser.class);
       query.setParameter("email", email);
-      query.setParameter("user_type1", WConstants.UserType.USER.getValue());
-      query.setParameter("user_type2", WConstants.UserType.ADMIN.getValue());
+      query.setParameter("user_type1", UserType.CUSTOMER.getValue());
+      query.setParameter("user_type2", UserType.ADMIN.getValue());
       return (EntityUser)query.getSingleResult();
     } catch (Exception e){
       log.error(e.getMessage(), e);
@@ -81,7 +82,7 @@ public class UserRepository {
     try{
       Query<?> query = session.createNativeQuery("select * from user where USER_ID = :userId and USER_TYPE = :user_type").addEntity(EntityUser.class);
       query.setParameter("userId", userId);
-      query.setParameter("user_type", WConstants.UserType.ADMIN.getValue());
+      query.setParameter("user_type", UserType.ADMIN.getValue());
       return (EntityUser)query.getSingleResult();
     } catch (Exception e){
       log.error(e.getMessage(), e);
@@ -95,7 +96,7 @@ public class UserRepository {
     try{
       Query<?> query = session.createNativeQuery("select * from user where USER_ID = :userId and USER_TYPE = :user_type").addEntity(EntityUser.class);
       query.setParameter("userId", userId);
-      query.setParameter("user_type", WConstants.UserType.USER.getValue());
+      query.setParameter("user_type", UserType.CUSTOMER.getValue());
       return (EntityUser)query.getSingleResult();
     } catch (Exception e){
       log.error(e.getMessage(), e);
@@ -110,7 +111,7 @@ public class UserRepository {
       Query<?> query = session.createNativeQuery("select A.* from ADDRESS A join USER U on A.ADDRESS_ID = U.ADDRESS_ID where " +
               "U.USER_ID = :userId and U.USER_TYPE = :userType").addEntity(EntityAddressModel.class);
       query.setParameter("userId", userId);
-      query.setParameter("userType", WConstants.UserType.USER.getValue());
+      query.setParameter("userType", UserType.CUSTOMER.getValue());
       return (EntityAddressModel)query.getSingleResult();
     } catch (Exception e){
       log.error(e.getMessage(), e);
@@ -142,10 +143,10 @@ public class UserRepository {
         query.setParameter("userId", data.getUserId());
         return query.executeUpdate();
       }
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     }
   }
 

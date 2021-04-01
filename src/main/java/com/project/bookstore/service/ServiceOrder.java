@@ -1,7 +1,7 @@
 package com.project.bookstore.service;
 
-import com.project.bookstore.common.Util;
-import com.project.bookstore.common.WConstants;
+import com.project.bookstore.miscellaneous.Util;
+import com.project.bookstore.miscellaneous.ErrorCodes;
 import com.project.bookstore.model.*;
 import com.project.bookstore.repository.OrderRepository;
 import org.json.JSONArray;
@@ -23,7 +23,7 @@ public class ServiceOrder {
   public String addSingleItemToCart(InputDataCartItem data){
     // make sure that user exists
     if(!userService.isUserExist(data.getUserId())){
-      Util.getJsonResponse(WConstants.RESULT_USER_DOES_NOT_EXIST, data.getUserId());
+      Util.getJsonResponse(ErrorCodes.RESULT_USER_DOES_NOT_EXIST, data.getUserId());
     }
     EntityOrder order = this.returnCartOrCreate(data.getUserId());
 
@@ -32,11 +32,11 @@ public class ServiceOrder {
     list.add(new EntityOrderDetail(order.getOrderId(), data.getBid(), data.getQuantity(), data.getPrice()));
 
     if(orderRepository.addCartItems(order.getOrderId(), list) != 1){
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, data.getUserId());
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, data.getUserId());
     }
 
     JSONObject json = new JSONObject();
-    json.put("status", WConstants.RESPONSE_SUCCESS);
+    json.put("status", ErrorCodes.RESPONSE_SUCCESS);
     json.put("message", "Item added to cart!");
     return json.toString();
   }
@@ -45,22 +45,22 @@ public class ServiceOrder {
     JSONObject json = new JSONObject();
     // make sure that user exists
     if(!userService.isUserExist(cartData.getUserId())) {
-      Util.getJsonResponse(WConstants.RESULT_USER_DOES_NOT_EXIST, cartData.getUserId());
+      Util.getJsonResponse(ErrorCodes.RESULT_USER_DOES_NOT_EXIST, cartData.getUserId());
     }
     EntityOrder order = this.returnCartOrCreate(cartData.getUserId());
 
     // Add items to the cart (order)
     int res = orderRepository.addCartItems(order.getOrderId(), cartData.getItemList());
     if(res >= 1){
-      json.put("status", WConstants.RESPONSE_SUCCESS);
+      json.put("status", ErrorCodes.RESPONSE_SUCCESS);
       json.put("message", "Items have been added to cart!");
       return json.toString();
     } else if(res == 0){ // error checking, unreachable case
-      json.put("status", WConstants.RESPONSE_SUCCESS);
+      json.put("status", ErrorCodes.RESPONSE_SUCCESS);
       json.put("message", "No items were added to the cart.");
       return json.toString();
     } else{
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, cartData.getUserId());
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, cartData.getUserId());
     }
   }
 
@@ -77,7 +77,7 @@ public class ServiceOrder {
     JSONObject json = new JSONObject();
     EntityOrder order = orderRepository.findCartByUserId(userId);
     if (order == null){
-      json.put("status", WConstants.RESPONSE_SUCCESS);
+      json.put("status", ErrorCodes.RESPONSE_SUCCESS);
       json.put("message", "Cart is empty! Maybe go shop around and add some items?");
       return json.toString();
     }
@@ -88,7 +88,7 @@ public class ServiceOrder {
     for (CartItem cartItem : cartItems) {
       cartTotal += cartItem.getAmount();
     }
-    json.put("status", WConstants.RESPONSE_SUCCESS);
+    json.put("status", ErrorCodes.RESPONSE_SUCCESS);
     json.put("cartTotal", Util.roundDouble(cartTotal));
     json.put("cartItems", cartItems);
     return json.toString();
@@ -100,17 +100,17 @@ public class ServiceOrder {
 
     // remove cart item
     if(orderRepository.removeCartItem(order.getOrderId(), data.getBid()) != 1){
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, data.getUserId());
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, data.getUserId());
     }
 
-    json.put("status", WConstants.RESPONSE_SUCCESS);
+    json.put("status", ErrorCodes.RESPONSE_SUCCESS);
     json.put("message", "Item successfully removed.");
     return json.toString();
   }
 
   public String confirmOrder(InputDataCreditCard data) {
     JSONObject json = new JSONObject();
-    json.put("status", WConstants.RESPONSE_FAIL);
+    json.put("status", ErrorCodes.RESPONSE_FAIL);
 
     EntityOrder order = orderRepository.findCartByUserId(data.getUserId());
     if(order == null){
@@ -119,7 +119,7 @@ public class ServiceOrder {
     }
 
     // Check number of order submit attempts. If > 3, put order in Denied Status
-    if (order.getSubmit_attempts() >= WConstants.ORDER_MAX_SUBMIT_ATTEMPTS){
+    if (order.getSubmit_attempts() >= ErrorCodes.ORDER_MAX_SUBMIT_ATTEMPTS){
       json.put("error", -1);
       json.put("message", "Credit Card Authorization Failed.");
       return json.toString(4);
@@ -149,10 +149,10 @@ public class ServiceOrder {
 
     // Submit order
     if(orderRepository.submitOrder(data.getUserId(), order.getOrderId()) != 1){
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, data.getUserId());
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, data.getUserId());
     }
 
-    json.put("status", WConstants.RESPONSE_SUCCESS);
+    json.put("status", ErrorCodes.RESPONSE_SUCCESS);
     json.put("message", "Order Successfully Completed.");
     json.put("orderId", "0000000" + order.getOrderId());
     return json.toString(4);
@@ -163,7 +163,7 @@ public class ServiceOrder {
     JSONObject mainJson = new JSONObject();
 
     if(list == null || list.isEmpty()){
-      mainJson.put("status_code", WConstants.RESPONSE_SUCCESS);
+      mainJson.put("status_code", ErrorCodes.RESPONSE_SUCCESS);
       mainJson.put("status", "Success");
       mainJson.put("message", "No orders for this book yet!");
       return mainJson.toString(4);

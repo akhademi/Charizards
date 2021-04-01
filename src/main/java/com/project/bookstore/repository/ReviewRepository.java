@@ -1,7 +1,8 @@
 package com.project.bookstore.repository;
 
-import com.project.bookstore.common.WConstants;
-import com.project.bookstore.controller.UserController;
+import com.project.bookstore.miscellaneous.Util;
+import com.project.bookstore.miscellaneous.ErrorCodes;
+import com.project.bookstore.controller.UserCtrl;
 import com.project.bookstore.model.EntityReview;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ import java.util.List;
 @Repository
 public class ReviewRepository {
 
-  Logger log = LoggerFactory.getLogger(UserController.class);
+  Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
   @Autowired
   private EntityManager entityManager;
@@ -46,7 +47,7 @@ public class ReviewRepository {
       return query.executeUpdate();
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     }
   }
 

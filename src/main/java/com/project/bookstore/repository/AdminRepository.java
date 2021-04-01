@@ -1,9 +1,7 @@
 package com.project.bookstore.repository;
-
-import com.project.bookstore.common.Util;
+import com.project.bookstore.miscellaneous.Util;
 import com.project.bookstore.controller.UserCtrl;
 import com.project.bookstore.model.BooksSoldModel;
-import com.project.bookstore.model.CartItem;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;

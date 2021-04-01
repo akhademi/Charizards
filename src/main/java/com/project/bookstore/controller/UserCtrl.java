@@ -1,10 +1,10 @@
 package com.project.bookstore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.bookstore.common.Util;
-import com.project.bookstore.common.WConstants;
+import com.project.bookstore.miscellaneous.Util;
+import com.project.bookstore.miscellaneous.*;
 import com.project.bookstore.model.*;
-import com.project.bookstore.service.UserService;
+import com.project.bookstore.service.ServiceUser;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserCtrl {
 
-  Logger log = LoggerFactory.getLogger(UserController.class);
+  Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
   @Autowired
-  UserService userService;
+  ServiceUser userService;
 
   @RequestMapping(value = "/signup", method = RequestMethod.POST)
   public String signup(@RequestBody String data){
@@ -27,13 +27,13 @@ public class UserController {
 
     try {
       ObjectMapper mapper = new ObjectMapper();
-      UserSignupInputData inputData = mapper.readValue(data, UserSignupInputData.class);
-      UserEntity user = new UserEntity(null, inputData.getFirstName(), inputData.getLastName(),
+      InputDataUserSignup inputData = mapper.readValue(data, UserSignupInputData.class);
+      EntityUser user = new EntityUser(null, inputData.getFirstName(), inputData.getLastName(),
               inputData.getEmail(), inputData.getPassword(), 0, null);
       return userService.singupUser(user);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, null);
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, null);
     }
 
   }
@@ -50,11 +50,11 @@ public class UserController {
 
     try{
       ObjectMapper mapper = new ObjectMapper();
-      UserLoginInputData inputData = mapper.readValue(data, UserLoginInputData.class);
+      InputDataUserLogin inputData = mapper.readValue(data, InputDataUserLogin.class);
       return userService.loginUser(inputData);
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, null);
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, null);
     }
   }
 
@@ -64,11 +64,11 @@ public class UserController {
 
     try{
       ObjectMapper mapper = new ObjectMapper();
-      AddressInputData inputData = mapper.readValue(data, AddressInputData.class);
+      InputDataAddress inputData = mapper.readValue(data, InputDataAddress.class);
       return userService.addUserAddress(inputData);
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, null);
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, null);
     }
   }
 
@@ -80,7 +80,7 @@ public class UserController {
       return userService.getAddress(userId);
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return Util.getJsonResponse(WConstants.RESULT_UNKNOWN_ERROR, null);
+      return Util.getJsonResponse(ErrorCodes.RESULT_UNKNOWN_ERROR, null);
     }
   }
 }

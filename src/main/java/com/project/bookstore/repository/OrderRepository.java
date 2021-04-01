@@ -1,8 +1,10 @@
 package com.project.bookstore.repository;
 
-import com.project.bookstore.common.Util;
-import com.project.bookstore.common.WConstants;
-import com.project.bookstore.controller.UserController;
+import com.project.bookstore.miscellaneous.Util;
+import com.project.bookstore.miscellaneous.OrderState.OrderStatus;
+import com.project.bookstore.miscellaneous.ErrorCodes;
+import com.project.bookstore.miscellaneous.OrderState;
+import com.project.bookstore.controller.UserCtrl;
 import com.project.bookstore.model.*;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -21,7 +23,7 @@ import java.util.List;
 @Repository
 public class OrderRepository {
 
-  Logger log = LoggerFactory.getLogger(UserController.class);
+  Logger log = LoggerFactory.getLogger(UserCtrl.class);
 
   @Autowired
   private EntityManager entityManager;
@@ -36,8 +38,8 @@ public class OrderRepository {
       Session session = getSession();
       Query<?> query = session.createNativeQuery("select * from ORDER where USER_ID = :userId and (STATUS = :status) limit 1").addEntity(EntityOrder.class);
       query.setParameter("userId", userId);
-      query.setParameter("status", WConstants.OrderStatus.IN_CART.getValue());
-//      query.setParameter("statuss", WConstants.OrderStatus.DENIED.getValue());
+      query.setParameter("status", OrderStatus.IN_CART.getValue());
+//      query.setParameter("statuss", ErrorCodes.OrderStatus.DENIED.getValue());
       return (EntityOrder)query.getSingleResult();
     } catch(Exception e){
       log.error(e.getMessage(), e);
@@ -51,7 +53,7 @@ public class OrderRepository {
       Session session = getSession();
       Query<?> query = session.createNativeQuery("insert into ORDER (user_id, status) values(:userId, :status)");
       query.setParameter("userId", userId);
-      query.setParameter("status", WConstants.OrderStatus.IN_CART.getValue());
+      query.setParameter("status", OrderStatus.IN_CART.getValue());
       int res = query.executeUpdate();
       if(res == 1){ // if successfully inserted, return it
         return findCartByUserId(userId);
@@ -84,7 +86,7 @@ public class OrderRepository {
       return res;
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     }
   }
 
@@ -129,7 +131,7 @@ public class OrderRepository {
       return res;
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     }
   }
 
@@ -146,7 +148,7 @@ public class OrderRepository {
       return res;
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     }
   }
 
@@ -157,14 +159,14 @@ public class OrderRepository {
       Session session = getSession();
       // If the same book exists in the cart, update it's quantity. If user adds different book then insert new entry as usual.
       Query<?> query = session.createNativeQuery("update ORDER set STATUS = :status where USER_ID = :userId and ORDER_ID = :orderId");
-      query.setParameter("status", WConstants.OrderStatus.ORDERED.getValue());
+      query.setParameter("status", OrderStatus.ORDERED.getValue());
       query.setParameter("orderId", orderId);
       query.setParameter("userId", userId);
       res = query.executeUpdate();
       return res;
     } catch (Exception e){
       log.error(e.getMessage(), e);
-      return WConstants.RESULT_UNKNOWN_ERROR;
+      return ErrorCodes.RESULT_UNKNOWN_ERROR;
     }
   }
 
