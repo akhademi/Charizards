@@ -1,9 +1,8 @@
 package com.project.bookstore.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bookstore.miscellaneous.*;
 import com.project.bookstore.service.ServiceAdmin;
-import org.glassfish.jersey.internal.guava.UnmodifiableIterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,30 +16,32 @@ public class AdminCtrl {
 	@Autowired
 	private ServiceAdmin adminService;
 
-	// call BookCtrl class to create book log
-	// waiting until BookCtrl class when completed
-	Logger log;
+	Logger log = LoggerFactory.getLogger(BookCtrl.class);
 
+	// generate table of books sold and their info (ie. price, quantity sold)
 	@GetMapping("/generateReport")
-	public String generateReport(@RequestParam String userId) {
-		if (StringUtils.isEmpty(userId)) {
-			return Util.getJsonResponse(FrontEndComs.RESULT_UNKNOWN_ERROR, userId);
+	public String generateReport(@RequestParam String userID) {
+		if (StringUtils.isEmpty(userID)) {
+			return Util.getJsonResponse(FrontEndComs.RESULT_UNKNOWN_ERROR, userID);
 		}
+		
 		try {
-			return adminService.generateReport(userId);
+			return adminService.generateReport(userID);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return Util.getJsonResponse(FrontEndComs.RESULT_UNKNOWN_ERROR, "admin error");
 		}
 	}
 
+	// return top 10 sold books
 	@GetMapping("/getTopSold")
-	public String getTop10(@RequestParam String userId) {
-		if (StringUtils.isEmpty(userId)) {
-			return Util.getJsonResponse(FrontEndComs.RESULT_UNKNOWN_ERROR, userId);
+	public String getTop10(@RequestParam String userID) {
+		if (StringUtils.isEmpty(userID)) {
+			return Util.getJsonResponse(FrontEndComs.RESULT_UNKNOWN_ERROR, userID);
 		}
+		
 		try {
-			return adminService.getTopSoldBooks(userId);
+			return adminService.getTopSoldBooks(userID);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return Util.getJsonResponse(FrontEndComs.RESULT_UNKNOWN_ERROR, "admin error");

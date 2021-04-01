@@ -1,11 +1,13 @@
 package com.project.bookstore.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bookstore.miscellaneous.*;
 import com.project.bookstore.model.EntityBookModel;
 import com.project.bookstore.model.EntityReview;
 import com.project.bookstore.model.InputDataReview;
 import com.project.bookstore.service.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +28,7 @@ public class BookCtrl {
 	@Autowired
 	private ServiceReview reviewService;
 
-	/*
-	 * @return list of next 10 books based on pageNo offset
-	 * @throws Exception
-	 */
-
+	// returns a list of the next 10 books starting from the pageno offset
 	@GetMapping("/getAllBooks")
 	public List<EntityBookModel> getAllBooks(@RequestParam(required = false, defaultValue = "1") Integer pageno) {
 		try {
@@ -41,26 +39,18 @@ public class BookCtrl {
 		}
 	}
 
-
-	/**
-	 * @return List of Category
-	 */
-
+	// returns a list of the next 10 books in a specified category starting from the pageno offset
 	@GetMapping("/findByCategory")
 	public List<EntityBookModel> findBooksByCategory(@RequestParam String category, @RequestParam(required = false, defaultValue = "1") Integer pageno) {
 		try {
-			return bookService.getBooksByCategory(category,pageno);
+			return bookService.getBooksByCategory(category, pageno);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return null;
 		}
 	}
 
-	/*
-	 * Controller to get all the categories
-	 * @return List of all Category
-	 * */
-
+	// returns a list of all the categories
 	@GetMapping("/getAllCategory")
 	public List<String> getAllCategory() {
 		try {
@@ -71,22 +61,21 @@ public class BookCtrl {
 		}
 	}
 
-	/**
-	 * @param bid - book id
-	 * @return book entity as a JSON String (with indentation), otherwise error with status code and message
-	 * @apiNote for both client and partners
-	 */
+	// returns a JSON string of a book, specified by the book ID (bid)
 	@GetMapping("/getProductInfo")
 	public String getBookInfo(@RequestParam(name = "bid") int bid) {
 		log.debug(String.format("Entered getProductInfo for bid: %s", bid));
 		ObjectMapper mapper = new ObjectMapper();
+		
 		try {
 			JSONObject json = new JSONObject();
 			EntityBookModel book = bookService.getBookInfo(bid);
 			
+			// if book not found, return an error code
 			if (book == null) {
 				json.put("status", FrontEndComs.RESPONSE_FAIL);
 				json.put("message", "Please enter a valid book/product ID.");
+				
 				return json.toString(4);
 			}
 			
@@ -98,42 +87,43 @@ public class BookCtrl {
 		}
 	}
 
-	/**
-	 * @param title: book title/seach query
-	 * @return list of all books containing that title word
-	 */
+	// searches for all books with titles matching the search title
+	// returns a list of the books resulting from the search
 	@GetMapping("/searchByTitle")
-	public List<EntityBookModel> searchBooksByTitle(@RequestParam(name = "title") String title){
+	public List<EntityBookModel> searchBooksByTitle(@RequestParam(name = "title") String title) {
 		log.debug(String.format("Entered searchBooksByTitle for title: %s", title));
-		try{
+		
+		try {
 			return bookService.searchBooksByTitle(title);
-		} catch (Exception e){
+		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return new ArrayList<>();
 		}
 	}
 
-	/* get Reviews for a book */
+	// returns a list of reviews for a specified book
 	@GetMapping("/getReviews")
-	public List<EntityReview> getReviewsForBook(@RequestParam(name = "bid") int bid){
-		try{
+	public List<EntityReview> getReviewsForBook(@RequestParam(name = "bid") int bid) {
+		try {
 			return reviewService.getReviewsForBook(bid);
-		} catch (Exception e){
+		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return null;
 		}
 	}
 
-	/* Add a review for a book */
+	// add a review for a book
 	@PostMapping("/addReview")
-	public String addReview(@RequestBody String data){
+	public String addReview(@RequestBody String data) {
 		log.debug(String.format("Entered addReview for data: %s", data));
 
-		try{
+		try {
 			ObjectMapper mapper = new ObjectMapper();
 			InputDataReview inputData = mapper.readValue(data, InputDataReview.class);
+			
 			return reviewService.addReview(inputData);
-		} catch (Exception e){
+			
+		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return Util.getJsonResponse(FrontEndComs.RESULT_UNKNOWN_ERROR, null);
 		}
