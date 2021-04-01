@@ -69,6 +69,24 @@ public class UserRepo {
 		}
 	}
 
+	// get user based on specified user ID
+	@Transactional
+	public EntityUser getUserByUserID(String userID) {
+		Session session = getSession();
+		
+		try {
+			Query<?> query = session.createNativeQuery("SELECT * FROM user WHERE USERID = :userID and USERTYPE = :userType").addEntity(EntityUser.class);
+			query.setParameter("userID", userID);
+			query.setParameter("userType", Users.UserType.CUSTOMER.getValue());
+			
+			return (EntityUser) query.getSingleResult();
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
+	}
+
 	// get admin based on specified user ID
 	@Transactional
 	public EntityUser getAdminByUserID(String userID) {
