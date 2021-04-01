@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class AdminService {
+public class ServiceAdmin {
 
   @Autowired
   UserService userService;

@@ -2,7 +2,7 @@ package com.project.bookstore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bookstore.miscellaneous.*;
-import com.project.bookstore.service.AdminService;
+import com.project.bookstore.service.ServiceAdmin;
 import org.glassfish.jersey.internal.guava.UnmodifiableIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminCtrl {
 
 	@Autowired
-	private AdminService adminService;
+	private ServiceAdmin adminService;
 
 	// call BookCtrl class to create book log
 	// waiting until BookCtrl class when completed
