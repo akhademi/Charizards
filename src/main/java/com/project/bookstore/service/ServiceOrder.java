@@ -127,8 +127,9 @@ public class ServiceOrder {
 		// Payment Details validation
 		if (!data.isValid()) {
 			StringBuilder errorMsg = new StringBuilder("Error: ");
+			
 			if (!data.isNameValid()) {
-				errorMsg.append("Name INVALID (max 30 characters)");
+				errorMsg.append("Name INVALID (max 30 characters). ");
 			}
 			if (!data.isNumberValid()) {
 				errorMsg.append("Credit card number INVALID. ");

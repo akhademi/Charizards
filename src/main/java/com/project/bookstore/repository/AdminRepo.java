@@ -3,7 +3,6 @@ package com.project.bookstore.repository;
 import com.project.bookstore.controller.UserCtrl;
 import com.project.bookstore.miscellaneous.Util;
 import com.project.bookstore.model.BooksSoldModel;
-import com.project.bookstore.model.CartItem;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
@@ -42,7 +41,7 @@ public class AdminRepo {
 					"select S.bid, B.title, B.price, S.quantity from summed S " +
 					"join BOOK B on S.bid = B.bid ");
 			
-			List<Object[]> itemList = (List<Object[]>)query.getResultList();
+			List<Object[]> itemList = (List<Object[]>) query.getResultList();
 			List<BooksSoldModel> books = new ArrayList<>();
 			
 			for (Object[] bookData: itemList) {
@@ -80,7 +79,7 @@ public class AdminRepo {
 					"join BOOK B on S.bid = B.bid " +
 					"order by S.quantity desc limit 10");
 			
-			List<Object[]> itemList = (List<Object[]>)query.getResultList();
+			List<Object[]> itemList = (List<Object[]>) query.getResultList();
 			List<BooksSoldModel> books = new ArrayList<>();
 			
 			for (Object[] bookData: itemList) {

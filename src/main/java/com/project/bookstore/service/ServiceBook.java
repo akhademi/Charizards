@@ -2,6 +2,8 @@ package com.project.bookstore.service;
 
 import com.project.bookstore.model.EntityBookModel;
 import com.project.bookstore.repository.BookRepo;
+
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ import java.util.List;
 @Service
 public class ServiceBook {
 
-	org.slf4j.Logger log = LoggerFactory.getLogger(ServiceBook.class);
+	Logger log = LoggerFactory.getLogger(ServiceBook.class);
 
 	@Autowired
 	private BookRepo bookRepository;
@@ -36,7 +38,7 @@ public class ServiceBook {
 	}
 
 	public List<EntityBookModel> getBooksByCategory(String category,Integer pageno) throws Exception {
-		if( StringUtils.isEmpty(category)) {
+		if (StringUtils.isEmpty(category)) {
 			return new ArrayList<>();
 		}
 		try {
