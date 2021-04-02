@@ -14,7 +14,7 @@ public class BookstoreAppInit {
 	public static void main(String[] args) {
 		SpringApplication.run(BookstoreAppInit.class, args);
 	}
-	
+
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
